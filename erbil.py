@@ -1,45 +1,61 @@
 import streamlit as st
-import requests
-import datetime
+import os
+import base64
 
-def get_weather_data(api_key, city):
-    url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    elif response.status_code == 401:
-        st.error("Error: Invalid API key. Please verify your API key.")
-    elif response.status_code == 404:
-        st.error("Error: City not found. Please check the city name.")
-    else:
-        st.error("Error: Unable to fetch weather data. Please try again later.")
-    return None
+# Sample data: List of e-books
+e_books = [
+    {"title": "E-Book 1", "author": "Author A", "file": "ebooks/ebook1.pdf"},
+    {"title": "E-Book 2", "author": "Author B", "file": "ebooks/ebook2.pdf"},
+    {"title": "E-Book 3", "author": "Author C", "file": "ebooks/ebook3.pdf"},
+]
 
-def display_weather(data):
-    st.header(f"Weather Forecast for {data['city']['name']}, {data['city']['country']}")
+# Function to display e-books
+def display_ebooks(books):
+    for book in books:
+        st.write(f"### {book['title']}")
+        st.write(f"Author: {book['author']}")
+        with open(book['file'], "rb") as file:
+            base64_pdf = base64.b64encode(file.read()).decode('utf-8')
+            pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500"></iframe>'
+            st.markdown(pdf_display, unsafe_allow_html=True)
 
-    for forecast in data['list'][:8]:  # Display the next 8 time periods (24 hours)
-        dt = datetime.datetime.fromtimestamp(forecast['dt'])
-        temp = forecast['main']['temp']
-        description = forecast['weather'][0]['description'].capitalize()
-        wind_speed = forecast['wind']['speed']
-
-        st.subheader(f"{dt.strftime('%A, %d %b %Y %H:%M')}:")
-        st.write(f"**Temperature:** {temp} °C")
-        st.write(f"**Description:** {description}")
-        st.write(f"**Wind Speed:** {wind_speed} m/s")
-        st.write("---")
-
+# Streamlit app
 def main():
-    st.title("Weather Forecast App for Erbil")
+    st.title("E-Library")
+    st.sidebar.title("Navigation")
 
-    # Replace this with your actual OpenWeatherMap API key
-    api_key = "2bf9a4742c15ffa9c3fbc10ccf75db6e"
-    city = "Erbil"
+    menu = ["Home", "Browse E-Books", "Search"]
+    choice = st.sidebar.radio("Menu", menu)
 
-    weather_data = get_weather_data(api_key, city)
-    if weather_data:
-        display_weather(weather_data)
+    if choice == "Home":
+        st.subheader("Welcome to the E-Library")
+        st.write("Browse and read e-books conveniently.")
+
+    elif choice == "Browse E-Books":
+        st.subheader("Available E-Books")
+        display_ebooks(e_books)
+
+    elif choice == "Search":
+        st.subheader("Search for E-Books")
+        search_query = st.text_input("Enter book title or author")
+        if search_query:
+            results = [
+                book for book in e_books
+                if search_query.lower() in book["title"].lower()
+                or search_query.lower() in book["author"].lower()
+            ]
+            if results:
+                display_ebooks(results)
+            else:
+                st.write("No results found.")
 
 if __name__ == "__main__":
+    # Ensure the e-books folder exists and contains sample files
+    os.makedirs("ebooks", exist_ok=True)
+    for idx, book in enumerate(e_books, start=1):
+        file_path = book['file']
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as f:
+                f.write(f"Sample content for {book['title']}")
+    
     main()
