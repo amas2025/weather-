@@ -19,14 +19,11 @@ def get_pdf_cover(pdf_path):
     except Exception as e:
         return None
 
-# Function to display e-books
-def display_ebooks(books):
+# Function to display e-books online
+def display_ebooks_online(books):
     for book in books:
         st.write(f"### {book['title']}")
         st.write(f"Author: {book.get('author', 'Unknown')}")
-        cover_path = get_pdf_cover(book['file'])
-        if cover_path and os.path.exists(cover_path):
-            st.image(cover_path, width=150)
         with open(book['file'], "rb") as file:
             base64_pdf = base64.b64encode(file.read()).decode('utf-8')
             pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500"></iframe>'
@@ -54,7 +51,7 @@ def main():
             for file in os.listdir(UPLOAD_DIR) if file.endswith('.pdf')
         ]
         if all_books:
-            display_ebooks(all_books)
+            display_ebooks_online(all_books)
         else:
             st.write("No e-books available. Upload some to get started.")
 
@@ -77,7 +74,7 @@ def main():
                 if search_query.lower() in file.lower()
             ]
             if results:
-                display_ebooks(results)
+                display_ebooks_online(results)
             else:
                 st.write("No results found.")
 
