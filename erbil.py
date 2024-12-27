@@ -1,16 +1,32 @@
 import streamlit as st
 import os
 import base64
+from PyPDF2 import PdfReader
+from PIL import Image
+from pdf2image import convert_from_path
 
 # Directory to store uploaded e-books
 UPLOAD_DIR = "uploaded_ebooks"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Function to extract the first page of a PDF as an image
+def get_pdf_cover(pdf_path):
+    try:
+        pages = convert_from_path(pdf_path, first_page=1, last_page=1)
+        cover_path = pdf_path.replace(".pdf", "_cover.jpg")
+        pages[0].save(cover_path, "JPEG")
+        return cover_path
+    except Exception as e:
+        return None
 
 # Function to display e-books
 def display_ebooks(books):
     for book in books:
         st.write(f"### {book['title']}")
         st.write(f"Author: {book.get('author', 'Unknown')}")
+        cover_path = get_pdf_cover(book['file'])
+        if cover_path and os.path.exists(cover_path):
+            st.image(cover_path, width=150)
         with open(book['file'], "rb") as file:
             base64_pdf = base64.b64encode(file.read()).decode('utf-8')
             pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500"></iframe>'
