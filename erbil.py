@@ -82,4 +82,14 @@ def main():
                 st.write("No results found.")
 
 if __name__ == "__main__":
+    try:
+        from pdf2image import convert_from_path
+    except ModuleNotFoundError:
+        st.error("Required library 'pdf2image' is not installed. Install it using 'pip install pdf2image'.")
+
+    try:
+        from PIL import Image
+    except ModuleNotFoundError:
+        st.error("Required library 'Pillow' is not installed. Install it using 'pip install Pillow'.")
+
     main()
