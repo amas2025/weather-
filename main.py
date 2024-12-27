@@ -10,40 +10,35 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Hardcoded credentials
-USERNAME = "amas"
-PASSWORD = "2025"
+# Hardcoded access code
+ACCESS_CODE = "iloveamas"
 
-# Available categories
-CATEGORIES = ["Chemistry", "Engineering", "Computer Science", "Physics", "Medical"]
-
-# Function for user authentication
-def authenticate_user():
-    """Authenticate user before allowing access to the app."""
-    st.title("📚 E-Library - Sign In")
-    username = st.text_input("Username", key="username_input")
-    password = st.text_input("Password", type="password", key="password_input")
+# Function for access code validation
+def validate_access():
+    """Validate access code before allowing access to the app."""
+    st.title("📚 E-Library - Access Required")
+    access_code = st.text_input("Enter Access Code", type="password", key="access_code_input")
     
-    if st.button("Sign In", key="sign_in_button"):
-        if username == USERNAME and password == PASSWORD:
-            st.session_state["authenticated"] = True
-            st.success("You have successfully signed in!")
+    if st.button("Access", key="access_button"):
+        if access_code == ACCESS_CODE:
+            st.session_state["has_access"] = True
+            st.success("Access granted! Welcome to the E-Library.")
             st.experimental_rerun()
         else:
-            st.error("Invalid username or password. Please try again.")
+            st.error("Invalid access code. Please try again.")
 
 # Main app function
 def main():
-    # Initialize session state for authentication
-    if "authenticated" not in st.session_state:
-        st.session_state["authenticated"] = False
+    # Initialize session state for access
+    if "has_access" not in st.session_state:
+        st.session_state["has_access"] = False
 
-    # Check if the user is authenticated
-    if not st.session_state["authenticated"]:
-        authenticate_user()
+    # Check if the user has access
+    if not st.session_state["has_access"]:
+        validate_access()
         return
 
-    # Main application after authentication
+    # Main application after access validation
     st.title("📚 E-Library")
     st.sidebar.title("📖 Navigation")
 
@@ -56,7 +51,7 @@ def main():
 
     elif choice == "📂 Browse E-Books":
         st.subheader("Browse E-Books by Category")
-        category = st.selectbox("Select a Category", CATEGORIES)
+        category = st.selectbox("Select a Category", ["Chemistry", "Engineering", "Computer Science", "Physics", "Medical"])
         books = list_ebooks("uploaded_ebooks", category)
         if books:
             display_ebooks_online(books)
@@ -65,7 +60,7 @@ def main():
 
     elif choice == "📤 Upload E-Books":
         st.subheader("Upload Your E-Books")
-        category = st.selectbox("Select a Category for Your Book", CATEGORIES)
+        category = st.selectbox("Select a Category for Your Book", ["Chemistry", "Engineering", "Computer Science", "Physics", "Medical"])
         uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
         if uploaded_file:
             upload_ebook(uploaded_file, "uploaded_ebooks", category)
@@ -73,7 +68,7 @@ def main():
     elif choice == "🔍 Search":
         st.subheader("Search for E-Books")
         query = st.text_input("Enter book title")
-        category = st.selectbox("Select a Category to Search", ["All"] + CATEGORIES)
+        category = st.selectbox("Select a Category to Search", ["All", "Chemistry", "Engineering", "Computer Science", "Physics", "Medical"])
         results = search_ebooks("uploaded_ebooks", query, category)
         if results:
             display_ebooks_online(results)
