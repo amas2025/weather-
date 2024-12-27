@@ -25,7 +25,7 @@ def main():
     choice = st.sidebar.radio("Menu", menu)
 
     # Placeholder for uploaded e-books
-e_books = []
+    e_books = []
 
     if choice == "Home":
         st.subheader("Welcome to the E-Library")
