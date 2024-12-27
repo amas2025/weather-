@@ -16,6 +16,9 @@ ACCESS_CODE = "iloveamas"
 # Function for access code validation
 def validate_access():
     """Validate access code before allowing access to the app."""
+    # Debugging: Check session state before validation
+    st.write("Session State (Before Validation):", st.session_state)
+
     st.title("📚 E-Library - Access Required")
     access_code = st.text_input("Enter Access Code", type="password", key="access_code_input")
     
@@ -29,6 +32,9 @@ def validate_access():
 
 # Main app function
 def main():
+    # Debugging: Check the session state
+    st.write("Session State:", st.session_state)
+
     # Initialize session state for access
     if "has_access" not in st.session_state:
         st.session_state["has_access"] = False
