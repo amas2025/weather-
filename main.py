@@ -10,7 +10,31 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Hardcoded credentials
+USERNAME = "amas"
+PASSWORD = "2025"
+
+# Function for user authentication
+def authenticate_user():
+    """Authenticate user before allowing access to the app."""
+    st.title("📚 E-Library - Sign In")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    if st.button("Sign In"):
+        if username == USERNAME and password == PASSWORD:
+            st.session_state["authenticated"] = True
+            st.success("You have successfully signed in!")
+            st.experimental_rerun()
+        else:
+            st.error("Invalid username or password. Please try again.")
+
 def main():
+    # Check if the user is authenticated
+    if "authenticated" not in st.session_state or not st.session_state["authenticated"]:
+        authenticate_user()
+        return
+
+    # Main application after authentication
     st.title("📚 E-Library")
     st.sidebar.title("📖 Navigation")
 
