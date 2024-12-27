@@ -18,7 +18,8 @@ def main():
     menu = ["🏠 Home", "📂 Browse E-Books", "📤 Upload E-Books", "🔍 Search"]
     choice = st.sidebar.radio("Select a Page", menu)
 
-    if choice == "🏠 Home":
-        st.image("https://via.placeholder.com/1200x300?text=Welcome+to+E-Library", use_column_width=True)
-        st.markdown("## Welcome to the E-Library 📚\nDiscover, upload, and read e-books online.")
-        st.markdown("### بەخێربێن بۆ یەکەم ئاپی کوردی تایبەت بە کتیبی ئۆنلاین")  # Kurdish text
+   if choice == "🏠 Home":
+    st.image("https://via.placeholder.com/1200x300?text=Welcome+to+E-Library", use_container_width=True)
+    st.markdown("## Welcome to the E-Library 📚\nDiscover, upload, and read e-books online.")
+    st.markdown("### بەخێربێن بۆ یەکەم ئاپی کوردی تایبەت بە کتیبی ئۆنلاین")  # Kurdish text
+
