@@ -31,8 +31,12 @@ def authenticate_user():
 
 # Main app function
 def main():
+    # Initialize session state for authentication
+    if "authenticated" not in st.session_state:
+        st.session_state["authenticated"] = False
+
     # Check if the user is authenticated
-    if "authenticated" not in st.session_state or not st.session_state["authenticated"]:
+    if not st.session_state["authenticated"]:
         authenticate_user()
         return
 
