@@ -14,6 +14,9 @@ st.set_page_config(
 USERNAME = "amas"
 PASSWORD = "2025"
 
+# Available categories
+CATEGORIES = ["Chemistry", "Engineering", "Computer Science", "Physics", "Medical"]
+
 # Function for user authentication
 def authenticate_user():
     """Authenticate user before allowing access to the app."""
@@ -52,28 +55,30 @@ def main():
         st.markdown("## Welcome to the E-Library 📚\nDiscover, upload, and read e-books online.")
 
     elif choice == "📂 Browse E-Books":
-        st.subheader("Available E-Books")
-        books = list_ebooks("uploaded_ebooks")
+        st.subheader("Browse E-Books by Category")
+        category = st.selectbox("Select a Category", CATEGORIES)
+        books = list_ebooks("uploaded_ebooks", category)
         if books:
             display_ebooks_online(books)
         else:
-            st.info("No e-books available. Upload some to get started.")
+            st.info(f"No e-books available in {category}. Upload some to get started.")
 
     elif choice == "📤 Upload E-Books":
         st.subheader("Upload Your E-Books")
+        category = st.selectbox("Select a Category for Your Book", CATEGORIES)
         uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
         if uploaded_file:
-            upload_ebook(uploaded_file, "uploaded_ebooks")
+            upload_ebook(uploaded_file, "uploaded_ebooks", category)
 
     elif choice == "🔍 Search":
         st.subheader("Search for E-Books")
         query = st.text_input("Enter book title")
-        if query:
-            results = search_ebooks("uploaded_ebooks", query)
-            if results:
-                display_ebooks_online(results)
-            else:
-                st.warning("No results found.")
+        category = st.selectbox("Select a Category to Search", ["All"] + CATEGORIES)
+        results = search_ebooks("uploaded_ebooks", query, category)
+        if results:
+            display_ebooks_online(results)
+        else:
+            st.warning("No results found.")
 
 if __name__ == "__main__":
     main()
