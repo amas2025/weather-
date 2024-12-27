@@ -7,9 +7,13 @@ def get_weather_data(api_key, city):
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
+    elif response.status_code == 401:
+        st.error("Error: Invalid API key. Please verify your API key.")
+    elif response.status_code == 404:
+        st.error("Error: City not found. Please check the city name.")
     else:
-        st.error("Error: Unable to fetch weather data. Please check your API key and try again.")
-        return None
+        st.error("Error: Unable to fetch weather data. Please try again later.")
+    return None
 
 def display_weather(data):
     st.header(f"Weather Forecast for {data['city']['name']}, {data['city']['country']}")
