@@ -8,7 +8,7 @@ def get_weather_data(api_key, city):
     if response.status_code == 200:
         return response.json()
     else:
-        st.error("Error: Unable to fetch weather data.")
+        st.error("Error: Unable to fetch weather data. Please check your API key and try again.")
         return None
 
 def display_weather(data):
@@ -29,6 +29,7 @@ def display_weather(data):
 def main():
     st.title("Weather Forecast App for Erbil")
 
+    st.write("Welcome to the Erbil Weather Forecast App. Enter your OpenWeatherMap API Key below to get started.")
     api_key = st.text_input("Enter your OpenWeatherMap API Key:", type="password")
     city = "Erbil"
 
