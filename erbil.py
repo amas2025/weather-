@@ -19,7 +19,7 @@ def get_pdf_cover(pdf_path):
     except Exception as e:
         return None
 
-# Function to display e-books online
+# Function to display e-books online with download option
 def display_ebooks_online(books):
     for book in books:
         st.write(f"### {book['title']}")
@@ -28,6 +28,12 @@ def display_ebooks_online(books):
             base64_pdf = base64.b64encode(file.read()).decode('utf-8')
             pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500"></iframe>'
             st.markdown(pdf_display, unsafe_allow_html=True)
+            st.download_button(
+                label=f"Download {book['title']}",
+                data=file,
+                file_name=book['file'],
+                mime="application/pdf"
+            )
 
 # Streamlit app
 def main():
