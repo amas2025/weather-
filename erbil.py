@@ -30,7 +30,7 @@ def main():
     st.title("Weather Forecast App for Erbil")
 
     # Replace this with your actual OpenWeatherMap API key
-    api_key = "your_default_api_key_here"
+    api_key = "2bf9a4742c15ffa9c3fbc10ccf75db6e"
     city = "Erbil"
 
     weather_data = get_weather_data(api_key, city)
