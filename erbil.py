@@ -29,14 +29,13 @@ def display_weather(data):
 def main():
     st.title("Weather Forecast App for Erbil")
 
-    st.write("Welcome to the Erbil Weather Forecast App. Enter your OpenWeatherMap API Key below to get started.")
-    api_key = st.text_input("Enter your OpenWeatherMap API Key:", type="password")
+    # Replace this with your actual OpenWeatherMap API key
+    api_key = "your_default_api_key_here"
     city = "Erbil"
 
-    if api_key:
-        weather_data = get_weather_data(api_key, city)
-        if weather_data:
-            display_weather(weather_data)
+    weather_data = get_weather_data(api_key, city)
+    if weather_data:
+        display_weather(weather_data)
 
 if __name__ == "__main__":
     main()
